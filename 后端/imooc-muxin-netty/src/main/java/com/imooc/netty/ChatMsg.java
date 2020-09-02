@@ -1,7 +1,7 @@
 package com.imooc.netty;
 
 import java.io.Serializable;
-
+//(senderID,receiverID,msg,msgID)
 public class ChatMsg implements Serializable {
 
 	private static final long serialVersionUID = 3611169682695799175L;

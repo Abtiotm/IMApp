@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import io.netty.channel.Channel;
 
-/**
+/** sendID -> channel
  * @Description: 用户id和channel的关联关系处理
  */
 public class UserChannelRel {

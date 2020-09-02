@@ -34,6 +34,8 @@ public class WSServer {
 	}
 	
 	public void start() {
+		//Future 提供了另一种在操作完成时通知应用程序的方式。这个对象可以看作是一个异步操
+		//作的结果的占位符；它将在未来的某个时刻完成，并提供对其结果的访问。
 		this.future = server.bind(8088);
 		System.err.println("netty websocket server 启动完毕...");
 	}

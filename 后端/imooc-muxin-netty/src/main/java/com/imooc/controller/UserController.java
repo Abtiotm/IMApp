@@ -66,7 +66,7 @@ public class UserController {
 		
 		UsersVO userVO = new UsersVO();
 		BeanUtils.copyProperties(userResult, userVO);
-		
+
 		return IMoocJSONResult.ok(userVO);
 	}
 	
@@ -78,7 +78,7 @@ public class UserController {
 		
 		// 获取前端传过来的base64字符串, 然后转换为文件对象再上传
 		String base64Data = userBO.getFaceData();
-		String userFacePath = "C:\\" + userBO.getUserId() + "userface64.png";
+		String userFacePath = "./" + userBO.getUserId() + "userface64.png";
 		FileUtils.base64ToFile(userFacePath, base64Data);
 		
 		// 上传文件到fastdfs

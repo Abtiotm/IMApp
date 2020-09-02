@@ -64,7 +64,8 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private FastDFSClient fastDFSClient;
-	
+
+	//根据username精确查找用户是否存在
 	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
 	public boolean queryUsernameIsExist(String username) {
@@ -77,6 +78,7 @@ public class UserServiceImpl implements UserService {
 		return result != null ? true : false;
 	}
 
+	//为了登陆，根据用户名和密码查找用户
 	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
 	public Users queryUserForLogin(String username, String pwd) {
@@ -92,6 +94,7 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
+	//保存用户
 	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
 	public Users saveUser(Users user) {
@@ -118,10 +121,11 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	// 更新USer
 	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
 	public Users updateUserInfo(Users user) {
-		userMapper.updateByPrimaryKeySelective(user);
+		userMapper.updateByPrimaryKeySelective(user);// 更新model中不为null的字段
 		return queryUserById(user.getId());
 	}
 	
@@ -130,6 +134,7 @@ public class UserServiceImpl implements UserService {
 		return userMapper.selectByPrimaryKey(userId);
 	}
 
+	//搜索用户
 	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
 	public Integer preconditionSearchFriends(String myUserId, String friendUsername) {
@@ -158,7 +163,8 @@ public class UserServiceImpl implements UserService {
 		
 		return SearchFriendsStatusEnum.SUCCESS.status;
 	}
-	
+
+	//通过username精确搜索用户信息
 	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
 	public Users queryUserInfoByUsername(String username) {
@@ -168,6 +174,7 @@ public class UserServiceImpl implements UserService {
 		return userMapper.selectOneByExample(ue);
 	}
 
+	// 发送好友请求
 	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
 	public void sendFriendRequest(String myUserId, String friendUsername) {
@@ -194,12 +201,15 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+
+	//用户查找自己的好友申请列表
 	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
 	public List<FriendRequestVO> queryFriendRequestList(String acceptUserId) {
 		return usersMapperCustom.queryFriendRequestList(acceptUserId);
 	}
 
+	//删除好友请求
 	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
 	public void deleteFriendRequest(String sendUserId, String acceptUserId) {
@@ -210,6 +220,7 @@ public class UserServiceImpl implements UserService {
 		friendsRequestMapper.deleteByExample(fre);
 	}
 
+	//通过好友请求
 	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
 	public void passFriendRequest(String sendUserId, String acceptUserId) {
@@ -228,7 +239,8 @@ public class UserServiceImpl implements UserService {
 							JsonUtils.objectToJson(dataContent)));
 		}
 	}
-	
+
+	//保存好友关系
 	@Transactional(propagation = Propagation.REQUIRED)
 	private void saveFriends(String sendUserId, String acceptUserId) {
 		MyFriends myFriends = new MyFriends();
@@ -239,6 +251,7 @@ public class UserServiceImpl implements UserService {
 		myFriendsMapper.insert(myFriends);
 	}
 
+	//查找我的好友
 	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
 	public List<MyFriendsVO> queryMyFriends(String userId) {
@@ -246,6 +259,7 @@ public class UserServiceImpl implements UserService {
 		return myFirends;
 	}
 
+	//存储聊天信息
 	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
 	public String saveMsg(ChatMsg chatMsg) {
@@ -264,12 +278,14 @@ public class UserServiceImpl implements UserService {
 		return msgId;
 	}
 
+	//批量签收消息
 	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
 	public void updateMsgSigned(List<String> msgIdList) {
 		usersMapperCustom.batchUpdateMsgSigned(msgIdList);
 	}
 
+	//得到未读消息列表
 	@Transactional(propagation = Propagation.SUPPORTS)
 	@Override
 	public List<com.imooc.pojo.ChatMsg> getUnReadMsgList(String acceptUserId) {
